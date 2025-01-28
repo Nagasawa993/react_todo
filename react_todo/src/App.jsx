@@ -1,33 +1,48 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+
+  const [jobs, setJobs] = useState([])
+  const [jobTop, setJobTop] = useState('')
+  const [jobId, setJobId] = useState(jobs.length + 1)
+
+  const handleInputChange = (e) => {
+    setJobTop(e.target.value)
+  }
+
+  const handleAddJob =() => {
+    setJobs([...jobs, {id: jobId, top: jobTop}])
+    setJobId(jobId + 1)
+    setJobTop('')
+  }
+
+  const handleDeleteJob=(targetJob)=>{
+    setJobs(jobs.filter((job) => job !== targetJob))
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div>
+      <input
+        type='text' 
+        label='タイトル'
+        value={jobTop}
+        onChange={handleInputChange}
+        />
+      <button onClick={handleAddJob}>Create</button>
+    </div>
+
+    <div>
+      <ul>
+        {jobs.map((job) => (
+          <li key={job.id}>
+            <span>{job.top}</span>
+            <button onClick={() => handleDeleteJob(job)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
     </>
   )
 }
