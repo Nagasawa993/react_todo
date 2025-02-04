@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 
 const App = () => {
 
@@ -65,6 +64,7 @@ const App = () => {
 
   return (
     <>
+    <div class="container">
       {isEditable ? (
         <div>
           <input
@@ -75,34 +75,39 @@ const App = () => {
           />
         <button onClick={handleEditTodo}>編集を保存</button>
         <button onClick={handleCloseEditForm}>キャンセル</button>
-        {isEnptyTop &&(
-          <span style={{ color: '#FF0000' }}>不正な入力です</span>
-        )}
+        <div>
+          {isEnptyTop &&(
+            <span style={{ color: '#FF0000' }}>文字数は1文字以上20文字以下です</span>
+          )}
+        </div>
       </div>
       ) : (
-    <div>
-      <input
-        type='text' 
-        label='タイトル'
-        value={jobTop}
-        onChange={handleInputChange}
-        />
-      <button onClick={handleAddJob}>Create</button>
-      {isEnptyTop &&(
-        <span style={{ color: '#FF0000' }}>不正な入力です</span>
-      )}
-    </div>
-      )}
-    <div>
-      <ul>
-        {jobs.map((job) => (
-          <li key={job.id}>
-            <span>{job.top}</span>
-            <button onClick={() => handleOpenEditForm(job)}>edit</button>
-            <button onClick={() => handleDeleteJob(job)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      <div>
+        <input
+          type='text' 
+          label='タイトル'
+          value={jobTop}
+          onChange={handleInputChange}
+          />
+        <button onClick={handleAddJob}>Create</button>
+        <div>
+          {isEnptyTop &&(
+            <span style={{ color: '#FF0000' }}>文字数は1文字以上20文字以下です</span>
+          )}
+        </div>
+      </div>
+        )}
+      <div>
+        <ul>
+          {jobs.map((job) => (
+            <li key={job.id}>
+              <span>{job.top.includes("誕生日") ? "☆" + job.top : job.top}</span>
+              <button onClick={() => handleOpenEditForm(job)}>edit</button>
+              <button onClick={() => handleDeleteJob(job)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
     </>
   )
