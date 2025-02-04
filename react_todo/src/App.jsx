@@ -9,12 +9,19 @@ const App = () => {
   const [isEditable, setIsEditable] = useState(false)
   const [editId, setEditId] = useState('')
   const [newTop, setNewTop] = useState('')
+  const [isEnptyTop, setIsEnptyTop] = useState(false)
 
   const handleInputChange = (e) => {
     setJobTop(e.target.value)
+    console.log(jobTop.length)
   }
 
   const handleAddJob =() => {
+    if (jobTop.length === 0 || jobTop.length > 20){
+      setIsEnptyTop(true)
+      return
+    }
+    setIsEnptyTop(false)
     setJobs([...jobs, {id: jobId, top: jobTop}])
     setJobId(jobId + 1)
     setJobTop('')
@@ -28,6 +35,7 @@ const App = () => {
     setIsEditable(true)
     setEditId(job.id)
     setNewTop(job.top)
+    setIsEnptyTop(false)
   }
 
   const handleEditFormChange = (e) => {
@@ -37,9 +45,14 @@ const App = () => {
   const handleCloseEditForm = () => {
     setIsEditable(false)
     setEditId('')
+    setIsEnptyTop(false)
   }
 
   const handleEditTodo = () => {
+    if (newTop.length === 0 || newTop.length > 20){
+      setIsEnptyTop(true)
+      return
+    }
     const newArray = jobs.map((job) =>
       job.id === editId ? { ...job, top: newTop } : job
     )
@@ -47,6 +60,7 @@ const App = () => {
     setEditId('')
     setNewTop('')
     handleCloseEditForm()
+    setIsEnptyTop(false)
   }
 
   return (
@@ -61,6 +75,9 @@ const App = () => {
           />
         <button onClick={handleEditTodo}>編集を保存</button>
         <button onClick={handleCloseEditForm}>キャンセル</button>
+        {isEnptyTop &&(
+          <span style={{ color: '#FF0000' }}>不正な入力です</span>
+        )}
       </div>
       ) : (
     <div>
@@ -71,6 +88,9 @@ const App = () => {
         onChange={handleInputChange}
         />
       <button onClick={handleAddJob}>Create</button>
+      {isEnptyTop &&(
+        <span style={{ color: '#FF0000' }}>不正な入力です</span>
+      )}
     </div>
       )}
     <div>
