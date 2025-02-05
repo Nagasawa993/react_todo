@@ -8,50 +8,60 @@ const App = () => {
   const [isEditable, setIsEditable] = useState(false)
   const [editId, setEditId] = useState('')
   const [newTop, setNewTop] = useState('')
-  const [isEnptyTop, setIsEnptyTop] = useState(false)
+  const [isEmptyTop, setIsEmptyTop] = useState(false)
 
+  // inputからの入力(e)を、変数に格納
   const handleInputChange = (e) => {
     setJobTop(e.target.value)
-    console.log(jobTop.length)
   }
 
+  // 変数内の文字数を確認し、問題なければ配列に格納
   const handleAddJob =() => {
+    // 変数内の文字数を確認
     if (jobTop.length === 0 || jobTop.length > 20){
-      setIsEnptyTop(true)
+      setIsEmptyTop(true)
       return
     }
-    setIsEnptyTop(false)
+    // 変数の値を配列に格納し、各種変数の更新と初期化
+    setIsEmptyTop(false)
     setJobs([...jobs, {id: jobId, top: jobTop}])
     setJobId(jobId + 1)
     setJobTop('')
   }
 
+  // 削除対象の引数(targetJob)を、配列から要素を削除
   const handleDeleteJob=(targetJob)=>{
     setJobs(jobs.filter((job) => job !== targetJob))
   }
 
+  // 要素(job)を、編集するための画面を表示
   const handleOpenEditForm = (job) => {
     setIsEditable(true)
     setEditId(job.id)
     setNewTop(job.top)
-    setIsEnptyTop(false)
+    setIsEmptyTop(false)
   }
 
+  // inputからの入力(e)を、変数に格納
   const handleEditFormChange = (e) => {
     setNewTop(e.target.value)
   }
 
+  // 編集用の入力要素を非表示
   const handleCloseEditForm = () => {
     setIsEditable(false)
     setEditId('')
-    setIsEnptyTop(false)
+    setIsEmptyTop(false)
   }
 
+  // 変数内の文字数を確認し、問題なければ配列に上書きで格納
   const handleEditTodo = () => {
+    // 変数内の文字数を確認
     if (newTop.length === 0 || newTop.length > 20){
-      setIsEnptyTop(true)
+      setIsEmptyTop(true)
       return
     }
+    // 配列に上書きで格納し、各種変数の更新と初期化
     const newArray = jobs.map((job) =>
       job.id === editId ? { ...job, top: newTop } : job
     )
@@ -59,13 +69,14 @@ const App = () => {
     setEditId('')
     setNewTop('')
     handleCloseEditForm()
-    setIsEnptyTop(false)
+    setIsEmptyTop(false)
   }
 
   return (
     <>
-    <div class="container">
+    <div className="container">
       {isEditable ? (
+        // jobの編集
         <div>
           <input
             type="text"
@@ -76,12 +87,13 @@ const App = () => {
         <button onClick={handleEditTodo}>編集を保存</button>
         <button onClick={handleCloseEditForm}>キャンセル</button>
         <div>
-          {isEnptyTop &&(
+          {isEmptyTop &&(
             <span style={{ color: '#FF0000' }}>文字数は1文字以上20文字以下です</span>
           )}
         </div>
       </div>
       ) : (
+      // jobの追加
       <div>
         <input
           type='text' 
@@ -91,12 +103,13 @@ const App = () => {
           />
         <button onClick={handleAddJob}>Create</button>
         <div>
-          {isEnptyTop &&(
+          {isEmptyTop &&(
             <span style={{ color: '#FF0000' }}>文字数は1文字以上20文字以下です</span>
           )}
         </div>
       </div>
         )}
+      {/* jobを一覧で表示 */}
       <div>
         <ul>
           {jobs.map((job) => (
